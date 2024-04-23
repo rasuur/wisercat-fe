@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-sm-3 p-0">
+    <select class="form-select"
+            (change)="changeType($event)">
+      <option *ngFor="let criteriaType of Object.values(CriteriaType)"
+              [value]="criteriaType"
+              [selected]="criteriaType === criteria.type">
+        {{ criteriaType }}
+      </option>
+    </select>
+  </div>
+  <div class="col-sm-4">
+    <select class="form-select"
+            (change)="changeAdditionalType($event)">
+      <option *ngFor="let criteriaAdditionalType of Object.values(getAdditionalTypeEnum())"
+              [value]="criteriaAdditionalType"
+              [selected]="criteriaAdditionalType === criteria.additionalType">
+        {{ criteriaAdditionalType }}
+      </option>
+    </select>
+  </div>
+  <div class="col-sm-4">
+    <input *ngIf="criteria.type === CriteriaType.TITLE"
+           class="form-control"
+           type="text"
+           [value]="criteria.choice"
+           (input)="changeValue($event)">
+    <input *ngIf="criteria.type === CriteriaType.AMOUNT"
+           class="form-control"
+           type="number"
+           [value]="criteria.choice"
+           (input)="changeValue($event)">
+    <div *ngIf="criteria.type === CriteriaType.DATE" class="input-group">
+      <input
+        class="form-control"
+        placeholder="dd-mm-yyyy"
+        name="dp"
+        ngbDatepicker
+        [(ngModel)]="dateStruct"
+        #d="ngbDatepicker"
+        (ngModelChange)="changeDate()"
+      />
+      <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+    </div>
+  </div>
+  <button class="btn btn-danger p-1 col-sm-1 bi bi-dash"
+          (click)="removeCriteria()">
+  </button>
+</div>

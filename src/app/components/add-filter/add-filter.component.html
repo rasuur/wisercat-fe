@@ -1,0 +1,49 @@
+<form (ngSubmit)="onFilterFormSubmit()" #form="ngForm">
+  <div class="modal-header">
+    <h5 class="modal-title col-11">Add Filter</h5>
+    <button *ngIf="isModal" type="button" class="btn btn-light col-1 bi bi-x"
+            (click)="dismiss()"></button>
+  </div>
+  <div class="modal-body modal-height">
+    <div class="row">
+      <h6 class="col-sm-2 mt-2">Filter name</h6>
+      <input class="col-sm-4" placeholder="My Filter 1" [(ngModel)]="filter.title" name="filterTitle" required #filterTitle="ngModel">
+      <div *ngIf="filterTitle.invalid" class="text-danger col-3 mt-1">
+        Filter name is required.
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <h6 class="col-sm-2 mt-3">Criteria</h6>
+      <div *ngFor="let criteria of filter.criterias; index as i" class="col-sm-9 mt-2" [ngClass]="{'offset-sm-2': i !== 0}">
+        <filter-criteria [criteria]="criteria"
+                         (remove)="removeCriteria(i)"></filter-criteria>
+      </div>
+      <div *ngIf="filter.criterias!.length < 1" class="col-sm-9 mt-3 text-danger">
+        No criteria selected! Add at least one.
+      </div>
+      <div class="row justify-content-center">
+        <button class="btn btn-outline-secondary p-1 m-2 col-sm-3 bi bi-plus"
+                (click)="addCriteria()">ADD CRITERIA</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <h6 class="col-sm-2 mt-1">Category</h6>
+      <div class="col-sm-10 p-0">
+        <div *ngFor="let category of Category | keyvalue" class="form-check form-check-inline" >
+          <input type="radio" class="form-check-input" name="category" [value]="category.value" (click)="changeSelection($event)">
+          <h6 class="form-check-label mb-0 mt-1">{{ category.value }}</h6>
+        </div>
+        <div *ngIf="this.filter.category!.length < 1" class="text-danger col-3 mt-1">
+          Add a selection.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="dismiss()">Close</button>
+    <button class="btn btn-primary" (click)="saveFilterAndCloseModal()"
+            [disabled]="this.form.invalid || this.filter.criterias!.length < 1 || (this.filter.category!.length < 1)">Save</button>
+  </div>
+</form>
